@@ -34,13 +34,13 @@ public class JenkinsApi {
     }
 
 
-    public void runBuild(JobType jobType, String gitUrl, String jobCommand) throws IOException {
+    public void runBuild(JobType jobType, String gitUrl, String jobCommand, String token) throws IOException {
 
 
         String jankinsJobName = env.getProperty(jobType.getJobName());
 
 
-        producer.produce(gitUrl, "test-jenkins-url", "SUCCESS");
+        producer.produce(gitUrl, "test-jenkins-url", "SUCCESS", token);
 
 
 

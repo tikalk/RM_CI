@@ -7,11 +7,22 @@ public class Message implements Serializable {
     private String githubUrl ;
     private String jenkinsUrl ;
     private String status ;
+    private String token;
 
-    public Message(String githubUrl, String jenkinsUrl, String status) {
+    public Message(String githubUrl, String jenkinsUrl, String status, String token) {
         this.githubUrl = githubUrl;
         this.jenkinsUrl = jenkinsUrl;
         this.status = status;
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public Message setToken(String token) {
+        this.token = token;
+        return this;
     }
 
     public String getGithubUrl() {

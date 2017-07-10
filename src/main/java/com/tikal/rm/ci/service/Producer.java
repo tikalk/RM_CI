@@ -18,9 +18,9 @@ public class Producer {
 
 
     public void produce(String githubUrl,   // serves as unique id
-                        String jenkinsUrl, String status) {
+                        String jenkinsUrl, String status, String token) {
 
-        Message message = new Message(githubUrl, jenkinsUrl, status);
+        Message message = new Message(githubUrl, jenkinsUrl, status, token);
 
         logger.debug("sending message to rabbit");
         rabbitTemplate.convertAndSend(message);

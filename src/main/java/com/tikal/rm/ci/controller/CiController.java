@@ -33,7 +33,7 @@ public class CiController {
         //  call service JenkinsApi.build()
 
         // temporary code, calling sender to send to rabbit mq (this should be called by service when it completes)
-        producer.produce(request.getGitUrl(), "test-jenkins-url", "SUCCESS");
+        producer.produce(request.getGitUrl(), "test-jenkins-url", "SUCCESS", "");
 
 
         return new Response("https://github.com/tikalk/RM_CI", "SUCCESS");

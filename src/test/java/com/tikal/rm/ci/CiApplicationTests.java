@@ -31,7 +31,7 @@ public class CiApplicationTests {
 	@Test
 	public void jenkinsApi() {
 		try {
-			jenkinsApi.runBuild(JobType.JAVA,"","");
+			jenkinsApi.runBuild(JobType.JAVA,"","", "");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
