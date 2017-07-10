@@ -70,7 +70,7 @@ public class JenkinsApi {
             logger.error("unknown error", e);
         }
 
-        producer.produce(gitUrl, "test-jenkins-url", "SUCCESS");
+        producer.produce(gitUrl, "test-jenkins-url", "SUCCESS", "");
 
 
     }
