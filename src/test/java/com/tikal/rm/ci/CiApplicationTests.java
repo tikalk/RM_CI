@@ -29,11 +29,13 @@ public class CiApplicationTests {
 
 
 	@Test
-	public void jenkinsApi() {
-		try {
-			jenkinsApi.runBuild(JobType.JAVA,"","");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void jenkinsApi() throws IOException {
+
+
+		String url = "https://github.com/tikalk/RM_CI.git";
+		String command = "mvn clean install";
+
+		jenkinsApi.runBuild(JobType.JAVA,url,command);
+
 	}
 }
