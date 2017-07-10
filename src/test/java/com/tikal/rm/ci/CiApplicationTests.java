@@ -27,7 +27,6 @@ public class CiApplicationTests {
 		assertThat(controller).isNotNull();
 	}
 
-
 	@Test
 	public void jenkinsApi() throws IOException {
 
