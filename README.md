@@ -5,5 +5,5 @@ Tikal RoadMapper - CI
 
 API
 
-localhost:8080/api/test?param=a
+http://localhost:8080/api/test?param=a
 
