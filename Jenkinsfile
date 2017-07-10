@@ -2,7 +2,7 @@ import groovy.json.*
 
 def waitForServices() {
   sh "./kubectl get svc --sort-by=.metadata.name --namespace=fuze -o json > services.json --kubeconfig=\$(pwd)/kconfig"
-  while(!toServiceMap(readFile('services.json')).containsKey('RM_CI')) {
+  while(!toServiceMap(readFile('services.json')).containsKey('rm_ci')) {
         sleep(10)
         echo "Services are not yet ready, waiting 10 seconds"
         sh "./kubectl get svc --sort-by=.metadata.name --namespace=fuze -o json > services.json --kubeconfig=\$(pwd)/kconfig"
@@ -54,8 +54,8 @@ node ('master') {
             sh(script: "\$(\${HOME}/.local/bin/aws ecr get-login --no-include-email &> /dev/null)", returnStdout:false)
             sh "cp \${HOME}/.docker/config.json \${HOME}/.dockercfg"
             withDockerRegistry([credentialsId: 'ecr:eu-west-2:k8s-aws-ecr', url: "${registry}"]) {
-              git 'https://github.com/tikalk/RM_CI.git'
-              def image = docker.build("329054710135.dkr.ecr.eu-west-2.amazonaws.com/RM_CI:${BUILD_NUMBER}")
+              git 'https://github.com/tikalk/rm_ci.git'
+              def image = docker.build("329054710135.dkr.ecr.eu-west-2.amazonaws.com/rm_ci:${BUILD_NUMBER}")
               image.push()
             }
           }
@@ -65,7 +65,7 @@ node ('master') {
         sh(script: """
         sed -i 's/BUILDNUMBER/${BUILD_NUMBER}/g' deployment.yaml
         ./kubectl apply -f deployment.yaml --kubeconfig=\$(pwd)/kconfig --namespace fuze
-        ./kubectl get pods --namespace fuze -l app=RM_CI &> /dev/null
+        ./kubectl get pods --namespace fuze -l app=rm_ci &> /dev/null
         """, returnStatus: false, returnStdout: false)
       }
     }
