@@ -10,11 +10,14 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 
 @Configuration
+@EnableAsync
 public class CiConfiguration {
 
 
@@ -40,11 +43,24 @@ public class CiConfiguration {
         return new JsonMessageConverter();
     }
 
+    @Value("${spring.rabbitmq.host}")
+    String host;
+
+    @Value("${spring.rabbitmq.port}")
+    String port;
+
+    @Value("${spring.rabbitmq.username}")
+    String user;
+
+    @Value("${spring.rabbitmq.password}")
+    String pass;
+
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("localhost");
-        connectionFactory.setUsername("guest");
-        connectionFactory.setPassword("guest");
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host);
+        connectionFactory.setUsername(user);
+        connectionFactory.setPassword(pass);
+        connectionFactory.setPort(Integer.parseInt(port));
         return connectionFactory;
     }
 
