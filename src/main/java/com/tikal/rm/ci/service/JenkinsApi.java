@@ -5,6 +5,8 @@ import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.client.JenkinsHttpClient;
 import com.offbytwo.jenkins.model.JobWithDetails;
 import com.offbytwo.jenkins.model.QueueReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -19,6 +21,8 @@ import java.util.Map;
 
 @Service
 public class JenkinsApi {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     Producer producer;
@@ -45,23 +49,28 @@ public class JenkinsApi {
     }
 
 
-    public void runBuild(JobType jobType, String gitUrl, String buildCommand) throws IOException {
+    public void runBuild(JobType jobType, String gitUrl, String buildCommand)  {
+
+        try {
+
+            String jankinsJobName = env.getProperty(jobType.getJobName());
+
+            JobWithDetails test = jenkinsServer.getJob(jankinsJobName);
 
 
-        String jankinsJobName = env.getProperty(jobType.getJobName());
+            Map<String, String> params = new HashMap<>();
 
-        JobWithDetails test = jenkinsServer.getJob(jankinsJobName);
-
-
-        Map<String, String> params = new HashMap<>();
-
-        params.put("repo_url", gitUrl);
-        params.put("build_command", buildCommand);
+            params.put("repo_url", gitUrl);
+            params.put("build_command", buildCommand);
 
 
-        QueueReference build = test.build(params);
+            QueueReference build = test.build(params);
 
-//        producer.produce(gitUrl, "test-jenkins-url", "SUCCESS");
+        } catch (Exception e) {
+            logger.error("unknown error", e);
+        }
+
+        producer.produce(gitUrl, "test-jenkins-url", "SUCCESS");
 
 
     }
