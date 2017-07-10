@@ -28,7 +28,7 @@ public class CiApplicationTests {
 	}
 
 	@Test
-	public void jenkinsApi() throws IOException {
+	public void jenkinsApi() throws IOException, InterruptedException {
 
 
 		String url = "https://github.com/tikalk/RM_CI.git";
