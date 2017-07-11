@@ -1,30 +1,3 @@
-import groovy.json.*
-
-def waitForServices() {
-  sh "./kubectl get svc --sort-by=.metadata.name --namespace=fuze -o json > services.json --kubeconfig=\$(pwd)/kconfig"
-  while(!toServiceMap(readFile('services.json')).containsKey('rm_ci')) {
-        sleep(10)
-        echo "Services are not yet ready, waiting 10 seconds"
-        sh "./kubectl get svc --sort-by=.metadata.name --namespace=fuze -o json > services.json --kubeconfig=\$(pwd)/kconfig"
-  }
-  echo "Services are ready, continuing"
-}
-
-@com.cloudbees.groovy.cps.NonCPS
-Map toServiceMap(servicesJson) {
-  def json = new JsonSlurper().parseText(servicesJson)
-  def serviceMap = [:]
-  json.items.each { i ->
-    def serviceName = i.metadata.name
-    def ingress = i.status.loadBalancer.ingress
-    if(ingress != null) {
-      def serviceUrl = ingress[0].hostname
-      serviceMap.put(serviceName, serviceUrl)
-    }
-  }
-  return serviceMap
-}
-
 def sh_out(cmd){
    sh(script: cmd, returnStdout:true).trim()
 }
@@ -43,8 +16,14 @@ node ('master') {
         chmod +x ./kubectl
         \${HOME}/.local/bin/aws s3 cp s3://k8s-hub-tikal-io/hub.tikal.io/kconfig .
         ./kubectl apply -f svc.yaml --kubeconfig=\$(pwd)/kconfig --namespace fuze
+        until [[ \${available} ]];
+        do
+          sleep 10
+          available=\$(./kubectl get svc -l app='rm-ci' --namespace=fuze -o json --kubeconfig=\$(pwd)/kconfig | python -c 'import json, sys; print(json.loads(sys.stdin.read())["items"][0]["metadata"]["labels"]["app"])')
+        done
+        echo "Service Available: \${available}"
+      done
         """)
-        waitForServices()
       }
       stage('Build & Push Image') {
         node ('linux-host-slave') {
