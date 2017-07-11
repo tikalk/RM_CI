@@ -1,4 +1,5 @@
-FROM frolvlad/alpine-oraclejdk8:slim
+FROM 3-jdk-7
+RUN mvn clean package
 VOLUME /tmp
 ADD ./target/ci-*-SNAPSHOT.jar app.jar
 RUN sh -c 'touch /app.jar'
