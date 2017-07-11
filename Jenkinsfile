@@ -16,6 +16,8 @@ node ('master') {
         chmod +x ./kubectl
         \${HOME}/.local/bin/aws s3 cp s3://k8s-hub-tikal-io/hub.tikal.io/kconfig .
         ./kubectl apply -f svc.yaml --kubeconfig=\$(pwd)/kconfig --namespace fuze
+        ls -la
+        sleep 500
         until [[ \${available} ]];
         do
           sleep 10
