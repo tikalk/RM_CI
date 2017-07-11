@@ -16,15 +16,6 @@ node ('master') {
         chmod +x ./kubectl
         \${HOME}/.local/bin/aws s3 cp s3://k8s-hub-tikal-io/hub.tikal.io/kconfig .
         ./kubectl apply -f svc.yaml --kubeconfig=\$(pwd)/kconfig --namespace fuze
-        ls -la
-        sleep 500
-        until [[ \${available} ]];
-        do
-          sleep 10
-          available=\$(./kubectl get svc -l app='rm-ci' --namespace=fuze -o json --kubeconfig=\$(pwd)/kconfig | python -c 'import json, sys; print(json.loads(sys.stdin.read())["items"][0]["metadata"]["labels"]["app"])')
-        done
-        echo "Service Available: \${available}"
-      done
         """)
       }
       stage('Build & Push Image') {
