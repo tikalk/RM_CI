@@ -4,6 +4,7 @@ import com.tikal.rm.ci.controller.CiController;
 import com.tikal.rm.ci.service.JenkinsApi;
 import com.tikal.rm.ci.service.JobType;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +29,7 @@ public class CiApplicationTests {
 	}
 
 	@Test
+@Ignore
 	public void jenkinsApi() throws IOException, InterruptedException {
 
 
