@@ -1,0 +1,17 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: rm-ci-deployment
+  namespace: fuze
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rm-ci
+    spec:
+      containers:
+      - name: rm-ci
+        image: 329054710135.dkr.ecr.eu-west-2.amazonaws.com/rm-ci:BUILDNUMBER
+        ports:
+        - containerPort: 8080
